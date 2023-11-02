@@ -4,7 +4,13 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-const Email = require('../utils/email');
+// const Email = require('../utils/email');
+
+const me = (req, res, next) => {
+  res.status(200).json({
+    message: 'cucc',
+  });
+};
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -47,17 +53,17 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordChangedAt: req.body.passwordChangedAt,
   });
 
-  if (process.env.NODE_ENV === 'production') {
-    const url = `${req.protocol}://${req.get('host')}/me`;
-    await new Email(newUser, url).sendGmail(
-      'welcome',
-      'Welcome to the PetVet Family'
-    );
-  } else if (process.env.NODE_ENV === 'development') {
-    const url = `${req.protocol}://${req.get('host')}/me`;
-    await new Email(newUser, url).sendWelcome();
-    // console.log('Development');
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  //   const url = `${req.protocol}://${req.get('host')}/me`;
+  //   await new Email(newUser, url).sendGmail(
+  //     'welcome',
+  //     'Welcome to the PetVet Family'
+  //   );
+  // } else if (process.env.NODE_ENV === 'development') {
+  //   const url = `${req.protocol}://${req.get('host')}/me`;
+  //   await new Email(newUser, url).sendWelcome();
+  //   // console.log('Development');
+  // }
 
   // const url = `${req.protocol}://${req.get('host')}/me`;
   // console.log(url);
